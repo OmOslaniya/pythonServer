@@ -5,12 +5,14 @@ import numpy as np
 import imutils
 import easyocr
 import re
-from flask_cors import CORS  # Import CORS
+from flask_cors import CORS, cross_origin  # Import CORS and cross_origin
 
 app = Flask(__name__)
-CORS(app)                                  
-@app.route('/api/upload', methods=['POST'])
+CORS(app)  # Apply CORS globally
 
+
+@app.route('/api/upload', methods=['POST'])
+@cross_origin()  # Apply CORS to this route
 def upload_file():
     if 'image' not in request.files:
         return jsonify({'error': 'No file part'})
@@ -48,7 +50,6 @@ def upload_file():
 
     plt.imshow(cv2.cvtColor(new_image, cv2.COLOR_BGR2RGB))
 
-                                    
     (x,y) = np.where(mask==255)
     (x1, y1) = (np.min(x), np.min(y))
     (x2, y2) = (np.max(x), np.max(y))
@@ -59,8 +60,6 @@ def upload_file():
     reader = easyocr.Reader(['en'])
     result = reader.readtext(cropped_image)
 
-    # print(result)
-
     text = result[0][-2]
     print(text)
 
@@ -68,4 +67,4 @@ def upload_file():
 
 
 # if __name__ == '__main__':
-    # app.run(debug=True,port=5002)
+#     app.run(debug=True, port=5002)
