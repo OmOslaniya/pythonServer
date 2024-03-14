@@ -1,0 +1,11 @@
+Flask
+opencv-python-headless
+matplotlib
+numpy
+imutils
+easyocr
+flask-cors
+Gunicorn
+
+
+
